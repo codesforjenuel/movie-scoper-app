@@ -1,13 +1,15 @@
 import { useState } from "react";
 
-export default function SearchBar() {
+export default function SearchBar({ onSearch }) {
     // Track the search input value
   const [query, setQuery] = useState();
 
   // Handle form submission
   function handleSubmit() {
     e.preventDefault();// prevent page refresh
-    console.log("User searched:", query);// temporary log for testing
+   if (query.trim() !== "") {
+    onSearch(query)// call parent function in App.jsx
+   }
   }
   return (
     <form onSubmit={handleSubmit} className="flex justify-center my-4">

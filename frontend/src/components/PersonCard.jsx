@@ -1,14 +1,14 @@
 export default function PersonCard({person}) {
     return (
         <div className="bg-white shadow-md rounded overflow-hidden">
-<img src={
-    person.profile_path
-    ? `https://image.tmdb.org/t/p/w300${person.profile_path}`
-    : "https://via.placeholder.com/300x450?text=no+image"
-} 
-alt={person.name}
-className="w-full h-64 object-cover"
+<img
+  src={person.profile_path 
+    ? `https://image.tmdb.org/t/p/w300${person.profile_path}` 
+    : '/placeholder.png'}
+  alt={person.name}
+  className="w-full h-64 object-cover"
 />
+
 <div className="p-3">
 <h2 className="font-bold text-lg">{person.name}</h2>
  {/* Known for (first 3 items) */}

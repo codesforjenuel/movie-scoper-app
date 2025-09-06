@@ -14,16 +14,11 @@ async function handleSearch(query, page = 1) {
   setLoading(true);
   try {
     const res = await fetch(
-      `https://api.themoviedb.org/3/search/${searchType}?query=${encodeURIComponent(query)}&page=${page}&include_adult=false&language=en-US`,
-      {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          Authorization: `Bearer ${apiToken}`,
-        },
-      }
-    );
-
+  `https://api.themoviedb.org/3/search/${searchType}?query=${encodeURIComponent(query)}&page=${page}&include_adult=false&language=en-US`,
+  {
+    headers: { Authorization: `Bearer ${apiToken}` },
+  }
+);
     const data = await res.json();
     console.log("Raw API data:", data);
     setResults(data.results || []);
@@ -35,11 +30,15 @@ async function handleSearch(query, page = 1) {
   }
 }
 
+function handleTypeChange(newType) {
+  setSearchType(newType);
+  setResults([]); // clear previous results
+}
 
   return (
 <div className="min-h-screen bg-gray-100">
   <h1 className="text-3xl font-bold text-center py-6">Movie Scoper</h1>
-  <SearchBar onSearch={handleSearch} searchType={searchType} onTypeChange={setSearchType} />
+  <SearchBar onSearch={handleSearch} searchType={searchType} onTypeChange={handleTypeChange} />
    {loading ? (
         <p className="text-center mt-8">Loading...</p>
       ) : results.length === 0 ? (
@@ -47,7 +46,7 @@ async function handleSearch(query, page = 1) {
       ) : searchType === "person" ? (
         <PersonList people={results} />
       ) : (
-        <MovieList movies={results} /> // MovieList will handle both movies and tv
+        <MovieList results={results} /> // MovieList will handle both movies and tv
       )}
 </div>
   );

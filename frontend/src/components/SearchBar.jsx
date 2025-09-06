@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function SearchBar({ onSearch }) {
+export default function SearchBar({ onSearch, searchType, onTypeChange }) {
     // Track the search input value
   const [query, setQuery] = useState("");
 
@@ -15,16 +15,30 @@ function handleSubmit(e) {
 
   return (
     <form onSubmit={handleSubmit} className="flex justify-center my-4">
+      <select className="border rounded p-2 bg-white"
+      value={searchType}
+      onChange={(event) => onTypeChange(event.target.value)}
+      >
+<option value="movie">Movies</option>
+<option value="tv">TV</option>
+<option value="person">Actors</option>
+      </select>
+      
+      
       <input
   type="text"
-  value={query || ""} 
-  onChange={(e) => setQuery(e.target.value)}
-  placeholder="Search for a movie..."
-  className="border rounded-l px-4 py-2 w-64 focus:outline-none"
+  value={query} 
+  onChange={(event) => setQuery(event.target.value)}
+  placeholder={
+    searchType === 'person' ? "Search actors"
+    : searchType === 'movie' ? 'Search movies'
+    :  "Search TV shows"
+  }
+  className="border rounded p-2 w-64"
 />
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded-r hover:bg-blue-700"
+        className="px-4 py-2 rounded bg-black text-white hover:opacity-90"
       >
         Search
       </button>

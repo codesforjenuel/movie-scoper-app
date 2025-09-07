@@ -26,8 +26,15 @@ export default function Home() {
         }
       );
 
-      const data = await res.json();
-      setResults(data.results || []);
+       const data = await res.json();
+
+      // Tag each result with media_type to know what type it is
+      const resultsWithType = (data.results || []).map((item) => ({
+        ...item,
+        media_type: searchType === "person" ? "person" : searchType,
+      }));
+
+      setResults(resultsWithType);
     } catch (error) {
       console.error("API fetch error:", error);
       setResults([]);
@@ -37,22 +44,37 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <h1 className="text-3xl font-bold text-center py-6">Movie Scoper</h1>
-      <SearchBar
-        onSearch={handleSearch}
-        searchType={searchType}
-        onTypeChange={setSearchType}
-      />
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white">
+      <h1 className="text-4xl md:text-5xl font-extrabold text-center py-8 tracking-wide text-yellow-400 drop-shadow-lg">
+        Movie Scoper
+      </h1>
+
+      <div className="max-w-3xl mx-auto">
+        <SearchBar
+          onSearch={handleSearch}
+          searchType={searchType}
+          onTypeChange={setSearchType}
+        />
+      </div>
+
       {loading ? (
-        <p className="text-center mt-8">Loading...</p>
+        <p className="text-center mt-8 text-gray-400 animate-pulse text-lg">
+          🔄 Loading...
+        </p>
       ) : results.length === 0 ? (
-        <p className="text-center mt-8">No results yet. Try a search!</p>
+        <p className="text-center mt-8 text-gray-400 text-lg">
+          🔍 No results yet. Try a search!
+        </p>
       ) : searchType === "person" ? (
         <PersonList people={results} />
       ) : (
         <MovieList movies={results} />
       )}
+
+      {/* Optional footer */}
+      <footer className="mt-12 text-center text-gray-500 text-sm">
+        &copy; {new Date().getFullYear()} Movie Scoper. Built with ❤️ using TMDB API.
+      </footer>
     </div>
   );
 }
